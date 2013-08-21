@@ -1,0 +1,10 @@
+{
+    "source": "github",
+    "owner": "jillix",
+    "name": "crud-links",
+    "dependencies": [
+        "/links.js",
+        "github/jillix/events/v0.1.2/events.js"
+    ]
+}
+
