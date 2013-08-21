@@ -1,3 +1,4 @@
+M.wrap('github/jillix/crud-links/dev/links.js', function (require, module, exports) {
 var devConfig = {
     
 };
@@ -13,3 +14,5 @@ function init (config) {
 
 module.exports = init;
 
+
+return module; });
