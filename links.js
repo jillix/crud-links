@@ -24,7 +24,25 @@ function setData (data) {
 }
 
 function setTemplate (template) {
-    console.log(template);
+    
+    var config = {
+        html: '/html/data/form_template_article_caller.html',
+        waitFor: ['crud'],
+        template: []
+    };
+    
+    // test module cloning
+    M.clone('#dataLinksContainer', 'data_form', 'Relation', config);
+    M.clone('#dataLinksContainer', 'data_table', 'Relation', config);
+    
+    if (template && template.links instanceof Array) {
+        for (var i = 0, l = template.links.length; i < l; ++i) {
+            //console.log(template.links[i]);
+            
+            // load filter...
+            // load tabel...
+        }
+    }
 }
 
 function init (config) {
@@ -43,6 +61,5 @@ function init (config) {
 }
 
 module.exports = init;
-
 
 return module; });
