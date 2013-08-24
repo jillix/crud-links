@@ -26,21 +26,80 @@ function setData (data) {
 function setTemplate (template) {
     
     var config = {
-        html: '/html/data/form_template_article_caller.html',
-        waitFor: ['crud'],
-        template: []
+        "html": "/html/data/filters.de.html",
+        "css": ["/css/filter.css"],
+        "waitFor": [
+            "crud",
+            "data_table",
+            "i18n"
+        ],
+        "i18n": true,
+        "ui": {
+            "events": {
+                "add": "click",
+                "cancel": "click",
+                "create": "click",
+                "remove": "click",
+                "itemEdit": "click",
+                "itemRemove": "click"
+            },
+            "filter": ".filter",
+            "list": ".filter-list",
+            "listItem": "li",
+            "valueLabel": ".valueLabel",
+            "valueField": ".valueField",
+            "inputs": {
+                "field": "select[name=field]",
+                "operator": "select[name=operator]"
+            },
+            "controls": {
+                "create": "button[name=create]",
+                "save": "button[name=save]",
+                "cancel": "button[name=cancel]",
+                "remove": "button[name=remove]"
+            },
+            "item": {
+                "onoff": ".onoff",
+                "field": ".field",
+                "operator": ".operator",
+                "value": ".value",
+                "remove": ".remove",
+                "edit": ".edit"
+            }
+        },
+        "listen": {
+            "data_list_templates": {
+                "selectionChanged": [
+                    { "emit": "setTemplate" }
+                ]
+            },
+            "data_table": {
+                "sort": [
+                    { "emit": "setOptions" }
+                ]
+            }
+        }
     };
     
     // test module cloning
-    M.clone('#dataLinksContainer', 'data_form', 'Relation', config);
-    M.clone('#dataLinksContainer', 'data_table', 'Relation', config);
+    M.clone('#linksContainer', 'data_filter', '_links', config);
+    
+    config.html = '/html/data/data_table.de.html';
+    config.template = [];
+    M.clone('#linksContainer', 'data_table', '_links', config);
     
     if (template && template.links instanceof Array) {
         for (var i = 0, l = template.links.length; i < l; ++i) {
-            //console.log(template.links[i]);
-            
-            // load filter...
-            // load tabel...
+            /*
+                TODO:
+                - define ui and interaction
+                - define event flow
+                - add relations to accordion
+                - create config for filter
+                - create config for table
+                - clone data_filter module
+                - clone data_table module
+            */
         }
     }
 }
