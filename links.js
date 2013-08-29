@@ -52,25 +52,58 @@ function setTemplate (template) {
     }
 
     for (var i = 0, l = template.links.length; i < l; ++i) {
+        var targetTemplateId = template.links[i]._tp;
         // we clone the default configurations because they will be modified by the modules
         var filterConfig = cloneJSON(self.config.clones.filter.config) || {};
         var tableConfig = cloneJSON(self.config.clones.table.config) || {};
+        // the clone miids
+        var filterCloneMiid = self.config.clones.filter.miid + '_' + template._id + '_' + targetTemplateId;
+        var tableCloneMiid = self.config.clones.table.miid + '_' + template._id + '_' + targetTemplateId;
+
+        // let CRUD know that he should listen to this new filter module
+        self.emit('listenTo', [filterCloneMiid]);
+
+        // the filter must wait for the table to load because it will notify the table about the template 
+        filterConfig.waitFor = filterConfig.waitFor || [];
+        filterConfig.waitFor.push(tableCloneMiid);
+        // configure the table to listen to the filter module
+        filterConfig.listen = filterConfig.listen || {};
+        filterConfig.listen[self.miid] = {};
+        filterConfig.listen[self.miid][filterCloneMiid + '_setTemplate'] = [ { emit: 'setTemplate' } ];
+
+        // configure the table to listen to the filter module
+        tableConfig.listen = tableConfig.listen || {};
+        tableConfig.listen[filterCloneMiid] = {
+            result: [ { handler: 'renderItemsFromResult' } ],
+            template: [ { handler: 'setTemplate' } ],
+            filtersChanged: [ { handler: 'clearSkip' } ]
+        };
 
         // links with table only option have only a filter with no UI
         if (!template.links[i].tableOnly && filterConfig.ui) {
             delete filterConfig.ui;
         }
 
+        // emit a special event to set the template for this filter module
+        (function(targetTemplateId){
+            self.on('ready', filterCloneMiid, function() {
+                self.emit(filterCloneMiid + '_setTemplate', targetTemplateId);
+            });
+        })(targetTemplateId);
+
         // clone the filters for this link
-        var filterCloneMiid = self.config.clones.filter.miid + '_' + template._id;
-        M.clone('#linksContainer', self.config.clones.filter.miid, '_' + template._id, filterConfig, function(module) {
-            self.clones[filterCloneMiid] = module;
-        });
+        M.clone('#linksContainer', self.config.clones.filter.miid, '_' + template._id + '_' + targetTemplateId, filterConfig, (function(filterCloneMiid) {
+            return function(module) {
+                self.clones[filterCloneMiid] = module;
+            };
+        })(filterCloneMiid));
+
         // clone the table for this link
-        var tableCloneMiid = self.config.clones.table.miid + '_' + template._id;
-        M.clone('#linksContainer', self.config.clones.table.miid, '_' + template._id, tableConfig, function(module) {
-            self.clones[tableCloneMiid] = module;
-        });
+        M.clone('#linksContainer', self.config.clones.table.miid, '_' + template._id + '_' + targetTemplateId, tableConfig, (function(tableCloneMiid) {
+            return function(module) {
+                self.clones[tableCloneMiid] = module;
+            };
+        })(tableCloneMiid));
     }
 }
 
