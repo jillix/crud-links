@@ -29,9 +29,25 @@ function setData (data) {
 }
 
 function setTemplate (template) {
+
     var self = this;
-    
-    if (!template || !template.links instanceof Array) {
+
+    if (!template || (self.template && self.template._id === template._id)) {
+        return;
+    }
+
+    self.template = template;
+
+    // uninit the clones
+    for (var cloneMiid in self.clones) {
+        self.uninit(cloneMiid);
+    }
+
+    // empty the clone cache
+    self.clones = {};
+
+    // nothing to do when there are no links
+    if (!template.links) {
         return;
     }
 
@@ -40,12 +56,21 @@ function setTemplate (template) {
         var filterConfig = cloneJSON(self.config.clones.filter.config) || {};
         var tableConfig = cloneJSON(self.config.clones.table.config) || {};
 
+        // links with table only option have only a filter with no UI
         if (!template.links[i].tableOnly && filterConfig.ui) {
             delete filterConfig.ui;
         }
 
-        M.clone('#linksContainer', self.config.clones.filter.miid, '_' + template._id, filterConfig);
-        M.clone('#linksContainer', self.config.clones.table.miid, '_' + template._id, tableConfig);
+        // clone the filters for this link
+        var filterCloneMiid = self.config.clones.filter.miid + '_' + template._id;
+        M.clone('#linksContainer', self.config.clones.filter.miid, '_' + template._id, filterConfig, function(module) {
+            self.clones[filterCloneMiid] = module;
+        });
+        // clone the table for this link
+        var tableCloneMiid = self.config.clones.table.miid + '_' + template._id;
+        M.clone('#linksContainer', self.config.clones.table.miid, '_' + template._id, tableConfig, function(module) {
+            self.clones[tableCloneMiid] = module;
+        });
     }
 }
 
