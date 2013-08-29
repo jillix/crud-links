@@ -45,7 +45,7 @@ function setTemplate (template) {
         }
 
         M.clone('#linksContainer', self.config.clones.filter.miid, '_' + template._id, filterConfig);
-        M.clone('#linksContainer', self.config.clones.filter.miid, '_' + template._id, tableConfig);
+        M.clone('#linksContainer', self.config.clones.table.miid, '_' + template._id, tableConfig);
     }
 }
 
