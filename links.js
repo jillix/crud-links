@@ -24,9 +24,15 @@ function setData (data) {
 }
 
 function setTemplate (template) {
+    var self = this;
     
     if (template && template.links instanceof Array) {
+
         for (var i = 0, l = template.links.length; i < l; ++i) {
+            for (var key in self.config.clones) {
+               var clone = self.config.clones[key];
+               M.clone('#linksContainer', clone.miid, '_links', clone.config);
+            }
             /*
                 TODO:
                 - define ui and interaction
@@ -49,6 +55,7 @@ function init (config) {
     
     // TODO only for dev
     self.config = devConfig;
+    self.config.clones = config.clones;
     
     self.on('setData', setData);
     self.on('setTemplate', setTemplate);
