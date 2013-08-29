@@ -24,9 +24,17 @@ function setData (data) {
 }
 
 function setTemplate (template) {
+    var self = this;
     
     if (template && template.links instanceof Array) {
+        var filterDefault = self.config.clones.filter;
+        var tableDefault = self.config.clones.table;
         for (var i = 0, l = template.links.length; i < l; ++i) {
+            if (!template.links[i].tableOnly) {
+                M.clone('#linksContainer', 'data_filter', '_links_' + i, filterDefault.config);
+            }
+            M.clone('#linksContainer', 'data_table', '_links_' + i, tableDefault.config);
+           
             /*
                 TODO:
                 - define ui and interaction
@@ -49,6 +57,7 @@ function init (config) {
     
     // TODO only for dev
     self.config = devConfig;
+    self.config.clones = config.clones;
     
     self.on('setData', setData);
     self.on('setTemplate', setTemplate);
