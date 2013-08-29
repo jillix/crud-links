@@ -27,12 +27,15 @@ function setTemplate (template) {
     var self = this;
     
     if (template && template.links instanceof Array) {
-
+        var filterDefault = self.config.clones.filter;
+        var tableDefault = self.config.clones.table;
         for (var i = 0, l = template.links.length; i < l; ++i) {
-            for (var key in self.config.clones) {
-               var clone = self.config.clones[key];
-               M.clone('#linksContainer', clone.miid, '_links', clone.config);
+            
+            if (!template.links[i].tableOnly) {
+                M.clone('#linksContainer', 'data_filter', '_links_' + i, filterDefault.config);
             }
+            M.clone('#linksContainer', 'data_table', '_links_' + i, tableDefault.config);
+
             /*
                 TODO:
                 - define ui and interaction
