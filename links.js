@@ -80,7 +80,7 @@ function setTemplate (template) {
         };
 
         // links with table only option have only a filter with no UI
-        if (!template.links[i].tableOnly && filterConfig.ui) {
+        if (template.links[i].tableOnly && filterConfig.ui) {
             delete filterConfig.ui;
         }
 
