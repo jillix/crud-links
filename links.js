@@ -63,13 +63,17 @@ function setTemplate (template) {
         // let CRUD know that he should listen to this new filter module
         self.emit('listenTo', [filterCloneMiid]);
 
-        // the filter must wait for the table to load because it will notify the table about the template 
+        // the filter must wait for the table to load because it will notify the table about the template
         filterConfig.waitFor = filterConfig.waitFor || [];
         filterConfig.waitFor.push(tableCloneMiid);
-        // configure the table to listen to the filter module
+        // configure the filter to listen to the table module
         filterConfig.listen = filterConfig.listen || {};
         filterConfig.listen[self.miid] = {};
         filterConfig.listen[self.miid][filterCloneMiid + '_setTemplate'] = [ { emit: 'setTemplate' } ];
+
+        filterConfig.listen[tableCloneMiid] = {
+            setOptions: [ { emit: 'setOptions' } ]
+        };
 
         // configure the table to listen to the filter module
         tableConfig.listen = tableConfig.listen || {};
