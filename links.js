@@ -24,21 +24,18 @@ function cloneJSON(obj) {
     return cloneO;
 }
 
-function extendSchema (schema) {
-    for (var field in schema) {
-        if (schema[field].link && schema[field].fields) {
-            schema[field].hidden = true;
-            for (var linkedField in schema[field].fields) {
-                schema[field + '.' + linkedField] = schema[field].fields[linkedField];
-            }
-        }
-    }
-    
-    return schema;
-}
-
 function setData (data) {
-    //console.log(data);
+    var self = this;
+    
+    // TODO set this filter only for specific filters
+    // TODO !!!!this is custom code!!!!
+    self.emit('dataSet', [{
+        field: 'user',
+        operator: '=',
+        value: data._id,
+        hidden: true,
+        fixed: true
+    }], true);
 }
 
 function setTemplate (template) {
@@ -106,6 +103,7 @@ function setTemplate (template) {
                 filterConfig.listen = filterConfig.listen || {};
                 filterConfig.listen[self.miid] = {};
                 filterConfig.listen[self.miid][filterCloneMiid + '_setTemplate'] = [ { emit: 'setTemplate' } ];
+                filterConfig.listen[self.miid].dataSet = [{emit: 'setFilters'}];
         
                 filterConfig.listen[tableCloneMiid] = {
                     setOptions: [ { emit: 'setOptions' } ]
