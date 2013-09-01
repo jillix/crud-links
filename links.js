@@ -62,7 +62,7 @@ function setTemplate (template) {
 function init (config) {
     var self = this;
     self.config = config;
-    self.linksTarget = self.dom.querySelector(self.linksTarget);
+    self.linksTarget = self.dom.querySelector(self.config.linksTarget);
 
     self.on('setTemplate', setTemplate);
 

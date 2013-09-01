@@ -64,6 +64,7 @@ function clone (link, filter, table) {
         // configure crud links ui events
         self.on('selectionChanged', tableCloneMiid, function () {
             console.log(link.table);
+            //self.emit('setFormTemplate', link.table.template);
         });
 
         // links with table only option have only a filter with no UI
