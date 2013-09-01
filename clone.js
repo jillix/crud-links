@@ -76,21 +76,23 @@ function clone (link, filter, table) {
             
             // handle on dataSet
             if (link.onDataSet) {
+                
                 self.on('setData', function (data) {
                     
-                    self.clones[filterCloneMiid].on('template', function (template) {
-                        
+                    self.clones[filterCloneMiid].once('template', function (template) {
                         var filters = [];
                         for (var i = 0, l = link.onDataSet.length; i < l; ++i) {
                             filters.push({
                                 field: link.onDataSet[i].field,
                                 operator: link.onDataSet[i].operator,
-                                value: data[link.onDataSet[i].value]
+                                value: data[link.onDataSet[i].value],
+                                fixed: true,
+                                hidde: true
                             });
                         }
                         
-                        self.clones[filterCloneMiid].emit('setFilters', filters);
-                    })
+                        self.clones[filterCloneMiid].emit('setFilters', filters, true);
+                    });
                     
                     self.clones[filterCloneMiid].emit('setTemplate', linkTemplate.id, true);
                 });

@@ -63,7 +63,6 @@ function init (config) {
     var self = this;
     self.config = config;
 
-    //self.on('setData', setData);
     self.on('setTemplate', setTemplate);
 
     // listen to external events
