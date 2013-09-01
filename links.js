@@ -135,7 +135,11 @@ function setTemplate (template) {
     self.dom.innerHTML = '';
     self.dom.appendChild(df);
 }
-
+/*
+    setFormTemplate
+    setFromData + query
+    resetForm
+*/
 function init (config) {
     var self = this;
     self.config = config;
