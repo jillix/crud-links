@@ -4,6 +4,7 @@
     "name": "crud-links",
     "dependencies": [
         "/links.js",
+        "/clone.js",
         "github/jillix/events/v0.1.2/events.js"
     ]
 }
