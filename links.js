@@ -24,39 +24,17 @@ function cloneJSON(obj) {
     return cloneO;
 }
 
-// TODO this is custom!!
-var hackMiidCache = {};
-function setFiltersOnSetData (miid) {
-    var self = this;
-    
-    if (!self.clones[miid] || hackMiidCache[miid]) {
-        return;
-    }
-    
-    hackMiidCache[miid] = 1;
-    
-    self.on('dataSet', function (filters, reset) {
-        self.clones[miid].emit('setFilters', filters, reset);
-    });
-}
-
 function setData (data) {
     var self = this;
-    
-    // TODO set this filter only for specific filters
-    // TODO !!!!this is custom code!!!!
-    self.emit('dataSet', [{
-        field: 'user',
-        operator: '=',
-        value: data._id,
-        //hidden: true,
-        //fixed: true
-    }], true);
 }
 
 function setTemplate (template) {
     
     var self = this;
+    
+    console.log(template);
+    return;
+    
 
     if (!template || (self.template && self.template._id === template._id)) {
         return;
@@ -137,8 +115,6 @@ function setTemplate (template) {
         
                 // emit a special event to set the template for this filter module
                 self.once('ready', filterCloneMiid, function() {
-                    // TODO this is custom code!!
-                    setFiltersOnSetData.call(self, filterCloneMiid);    
                     self.clones[filterCloneMiid].emit('setTemplate', targetTemplateId);
                 });
         
