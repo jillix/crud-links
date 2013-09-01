@@ -55,13 +55,14 @@ function setTemplate (template) {
     }
     
     // append document fragment to the dom
-    self.dom.innerHTML = '';
-    self.dom.appendChild(df);  
+    self.linksTarget.innerHTML = '';
+    self.linksTarget.appendChild(df);  
 }
 
 function init (config) {
     var self = this;
     self.config = config;
+    self.linksTarget = self.dom.querySelector(self.linksTarget);
 
     self.on('setTemplate', setTemplate);
 

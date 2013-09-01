@@ -60,6 +60,11 @@ function clone (link, filter, table) {
             template: [ { handler: 'setTemplate' } ],
             filtersChanged: [ { handler: 'clearSkip' } ]
         };
+        
+        // configure crud links ui events
+        self.on('selectionChanged', tableCloneMiid, function () {
+            console.log(link.table);
+        });
 
         // links with table only option have only a filter with no UI
         if (linkTemplate.tableOnly && filterConfig.ui) {
