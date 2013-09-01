@@ -24,6 +24,22 @@ function cloneJSON(obj) {
     return cloneO;
 }
 
+// TODO this is custom!!
+var hackMiidCache = {};
+function setFiltersOnSetData (miid) {
+    var self = this;
+    
+    if (!self.clones[miid] || hackMiidCache[miid]) {
+        return;
+    }
+    
+    hackMiidCache[miid] = 1;
+    
+    self.on('dataSet', function (filters, reset) {
+        self.clones[miid].emit('setFilters', filters, reset);
+    });
+}
+
 function setData (data) {
     var self = this;
     
@@ -33,13 +49,13 @@ function setData (data) {
         field: 'user',
         operator: '=',
         value: data._id,
-        hidden: true,
-        fixed: true
+        //hidden: true,
+        //fixed: true
     }], true);
 }
 
 function setTemplate (template) {
-
+    
     var self = this;
 
     if (!template || (self.template && self.template._id === template._id)) {
@@ -101,10 +117,7 @@ function setTemplate (template) {
                 filterConfig.waitFor.push(tableCloneMiid);
                 // configure the filter to listen to the table module
                 filterConfig.listen = filterConfig.listen || {};
-                filterConfig.listen[self.miid] = {};
-                filterConfig.listen[self.miid][filterCloneMiid + '_setTemplate'] = [ { emit: 'setTemplate' } ];
-                filterConfig.listen[self.miid].dataSet = [{emit: 'setFilters'}];
-        
+                
                 filterConfig.listen[tableCloneMiid] = {
                     setOptions: [ { emit: 'setOptions' } ]
                 };
@@ -123,8 +136,10 @@ function setTemplate (template) {
                 }
         
                 // emit a special event to set the template for this filter module
-                self.on('ready', filterCloneMiid, function() {
-                    self.emit(filterCloneMiid + '_setTemplate', targetTemplateId);
+                self.once('ready', filterCloneMiid, function() {
+                    // TODO this is custom code!!
+                    setFiltersOnSetData.call(self, filterCloneMiid);    
+                    self.clones[filterCloneMiid].emit('setTemplate', targetTemplateId);
                 });
         
                 // clone the filters for this link
@@ -154,7 +169,7 @@ function init (config) {
 
     // listen to external events
     Events.call(self, self.config);
-
+    
     self.emit('ready');
 }
 
