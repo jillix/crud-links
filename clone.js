@@ -65,6 +65,7 @@ function clone (link, filter, table) {
         if (link.table) {
             self.on('selectionChanged', tableCloneMiid, function (selection) {
                 
+                self.emit('resetForm');
                 // set template on link form
                 self.emit('setFormTemplate', link.table.template || linkTemplate.id, function () {
                     

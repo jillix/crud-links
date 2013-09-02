@@ -11,6 +11,9 @@ function setTemplate (template) {
     
     var self = this;
     
+    // reset links target html
+    self.linksTarget.innerHTML = '';
+    
     var template = typeof template === 'string' ? template : (template.id || template._id);
     
     // check template
@@ -67,7 +70,6 @@ function setTemplate (template) {
         }
         
         // append document fragment to the dom
-        self.linksTarget.innerHTML = '';
         self.linksTarget.appendChild(df);
     });
 }
