@@ -100,22 +100,18 @@ function clone (link, filter, table) {
             self.data = data;
             
             if (link.onDataSet) {
-                self.once('template', filterCloneMiid, function (template) {
-                    var filters = [];
-                    for (var i = 0, l = link.onDataSet.length; i < l; ++i) {
-                        filters.push({
-                            field: link.onDataSet[i].field,
-                            operator: link.onDataSet[i].operator,
-                            value: data[link.onDataSet[i].value],
-                            fixed: true,
-                            hidden: true
-                        });
-                    }
-                    
-                    self.clones[filterCloneMiid].emit('setFilters', filters, true);
-                });
+                var filters = [];
+                for (var i = 0, l = link.onDataSet.length; i < l; ++i) {
+                    filters.push({
+                        field: link.onDataSet[i].field,
+                        operator: link.onDataSet[i].operator,
+                        value: data[link.onDataSet[i].value],
+                        fixed: true,
+                        hidden: true
+                    });
+                }
                 
-                self.clones[filterCloneMiid].emit('setTemplate', linkTemplate.id, true);
+                self.clones[filterCloneMiid].emit('setFilters', filters, true);
             }
         });
         
@@ -125,6 +121,10 @@ function clone (link, filter, table) {
             // emit a special event to set the template for this filter module
             if (!(link.filter && link.filter.dontLoad)) {
                 self.clones[filterCloneMiid].emit('setTemplate', linkTemplate.id);
+            }
+            
+            if (link.onDataSet) {
+                self.clones[filterCloneMiid].emit('setTemplate', linkTemplate.id, true);
             }
         });
         
