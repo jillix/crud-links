@@ -7,20 +7,25 @@ function setData (data) {
     var self = this;
 }
 
-function setTemplate (template) {
-    
+function setTemplate (template, force) {
     var self = this;
-    
-    // reset links target html
-    self.linksTarget.innerHTML = '';
-    
+
+    // TODO this is a hack until bind knows how select keys in parameters
     var template = typeof template === 'string' ? template : (template.id || template._id);
-    
-    // check template
-    if (!template || (self.template && self.template._id === template)) {
+    if (!template) {
+        // cleanup on error
+        self.linksTarget.innerHTML = '';
         // TODO handle error
         return;
     }
+
+    // nothing to do if the same template
+    if (!force && self.template && self.template._id === template) {
+        return;
+    }
+
+    // reset links target html
+    self.linksTarget.innerHTML = '';
 
     self.emit('getTemplates', [template], function (err, templates) {
         
