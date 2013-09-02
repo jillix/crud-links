@@ -24,8 +24,9 @@ function setTemplate (template) {
     // empty the clone cache
     self.clones = {};
     
-    // delete setData events
+    // delete events
     self.off('setData');
+    self.off('selectionChanged');
 
     // nothing to do when there are no links
     if (!template.links) {

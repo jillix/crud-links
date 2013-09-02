@@ -62,9 +62,24 @@ function clone (link, filter, table) {
         };
         
         // configure crud links ui events
-        self.on('selectionChanged', tableCloneMiid, function () {
-            console.log(link.table);
-            //self.emit('setFormTemplate', link.table.template);
+        self.on('selectionChanged', tableCloneMiid, function (selection) {
+            
+            // set template on link form
+            self.emit('setFormTemplate', link.table.template, function () {
+                
+                // build query
+                if (link.table.query) {
+                    for (var field in link.table.query) {
+                        if (link.table.query[field].indexOf('#') === 0) {
+                            link.table.query[field] = self.data[link.table.query[field].substr(1)];
+                        } else {
+                            link.table.query[field] = selection[link.table.query[field]];
+                        }
+                    }
+                }
+                
+                self.emit('setFormData', link.table.query, link.table.query);
+            });
         });
 
         // links with table only option have only a filter with no UI
@@ -72,36 +87,37 @@ function clone (link, filter, table) {
             delete filterConfig.ui;
         }
         
+        // handle on dataSet
+        self.on('setData', function (data) {
+            
+            self.data = data;
+            
+            if (link.onDataSet) {
+                self.once('template', filterCloneMiid, function (template) {
+                    var filters = [];
+                    for (var i = 0, l = link.onDataSet.length; i < l; ++i) {
+                        filters.push({
+                            field: link.onDataSet[i].field,
+                            operator: link.onDataSet[i].operator,
+                            value: data[link.onDataSet[i].value],
+                            fixed: false,
+                            hidden: false
+                        });
+                    }
+                    
+                    self.clones[filterCloneMiid].emit('setFilters', filters, true);
+                });
+                
+                self.clones[filterCloneMiid].emit('setTemplate', linkTemplate.id, true);
+            }
+        });
+        
         // set up events when filter is ready
         self.once('ready', filterCloneMiid, function() {
             
             // emit a special event to set the template for this filter module
             if (!(link.filter && link.filter.dontLoad)) {
                 self.clones[filterCloneMiid].emit('setTemplate', linkTemplate.id);
-            }
-            
-            // handle on dataSet
-            if (link.onDataSet) {
-                
-                self.on('setData', function (data) {
-                    
-                    self.clones[filterCloneMiid].once('template', function (template) {
-                        var filters = [];
-                        for (var i = 0, l = link.onDataSet.length; i < l; ++i) {
-                            filters.push({
-                                field: link.onDataSet[i].field,
-                                operator: link.onDataSet[i].operator,
-                                value: data[link.onDataSet[i].value],
-                                fixed: true,
-                                hidde: true
-                            });
-                        }
-                        
-                        self.clones[filterCloneMiid].emit('setFilters', filters, true);
-                    });
-                    
-                    self.clones[filterCloneMiid].emit('setTemplate', linkTemplate.id, true);
-                });
             }
         });
         
