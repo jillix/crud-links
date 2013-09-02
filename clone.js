@@ -62,25 +62,31 @@ function clone (link, filter, table) {
         };
         
         // configure crud links ui events
-        self.on('selectionChanged', tableCloneMiid, function (selection) {
-            
-            // set template on link form
-            self.emit('setFormTemplate', link.table.template, function () {
+        if (link.table) {
+            self.on('selectionChanged', tableCloneMiid, function (selection) {
                 
-                // build query
-                if (link.table.query) {
-                    for (var field in link.table.query) {
-                        if (link.table.query[field].indexOf('#') === 0) {
-                            link.table.query[field] = self.data[link.table.query[field].substr(1)];
-                        } else {
-                            link.table.query[field] = selection[link.table.query[field]];
+                // set template on link form
+                self.emit('setFormTemplate', link.table.template || linkTemplate.id, function () {
+                    
+                    // build query
+                    var query = {};
+                    if (link.table.query) {
+                        for (var field in link.table.query) {
+                            if (link.table.query[field].indexOf('#') === 0) {
+                                var _field = link.table.query[field].substr(1);
+                                query[field] = self.data[_field];
+                            } else {
+                                query[field] = selection[link.table.query[field]];
+                            }
                         }
+                        
+                        self.emit('setFormData', query, query);
+                    } else {
+                        self.emit('setFormData', selection);
                     }
-                }
-                
-                self.emit('setFormData', link.table.query, link.table.query);
+                });
             });
-        });
+        }
 
         // links with table only option have only a filter with no UI
         if (linkTemplate.tableOnly && filterConfig.ui) {

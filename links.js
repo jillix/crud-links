@@ -11,53 +11,65 @@ function setTemplate (template) {
     
     var self = this;
     
-    if (!template || !template.links || (self.template && self.template._id === template._id)) {
+    var template = typeof template === 'string' ? template : (template.id || template._id);
+    
+    // check template
+    if (!template || (self.template && self.template._id === template)) {
+        // TODO handle error
         return;
     }
 
-    self.template = template;
-    
-    // uninit the clones
-    for (var cloneMiid in self.clones) {
-        self.uninit(cloneMiid);
-    }
-    // empty the clone cache
-    self.clones = {};
-    
-    // delete events
-    self.off('setData');
-    self.off('selectionChanged');
-
-    // nothing to do when there are no links
-    if (!template.links) {
-        return;
-    }
-    
-    // append links in order
-    var df = document.createDocumentFragment();
-    for (var i = 0, l = template.links.length; i < l; ++i) {
+    self.emit('getTemplates', [template], function (err, templates) {
         
-        // append dom in order
-        var filter = document.createElement('div');
-        var table = document.createElement('div');
-        filter.setAttribute('id', 'filter_' + i);
-        table.setAttribute('id', 'table_' + i);
-        df.appendChild(filter);
-        df.appendChild(table);
-        
-        // append a hr element at the end of a relation
-        // except the for the last relation
-        if (i !== (template.links.length - 1)) {
-            df.appendChild(document.createElement('hr'));
+        template = templates[template];
+        if (!template || !template.links) {
+            return;
         }
         
-        // create links
-        clone.call(self, template.links[i], filter, table); 
-    }
+        self.template = template;
+        
+        // uninit the clones
+        for (var cloneMiid in self.clones) {
+            self.uninit(cloneMiid);
+        }
+        // empty the clone cache
+        self.clones = {};
+        
+        // delete events
+        self.off('setData');
+        self.off('selectionChanged');
     
-    // append document fragment to the dom
-    self.linksTarget.innerHTML = '';
-    self.linksTarget.appendChild(df);  
+        // nothing to do when there are no links
+        if (!template.links) {
+            return;
+        }
+        
+        // append links in order
+        var df = document.createDocumentFragment();
+        for (var i = 0, l = template.links.length; i < l; ++i) {
+            
+            // append dom in order
+            var filter = document.createElement('div');
+            var table = document.createElement('div');
+            filter.setAttribute('id', 'filter_' + i);
+            table.setAttribute('id', 'table_' + i);
+            df.appendChild(filter);
+            df.appendChild(table);
+            
+            // append a hr element at the end of a relation
+            // except the for the last relation
+            if (i !== (template.links.length - 1)) {
+                df.appendChild(document.createElement('hr'));
+            }
+            
+            // create links
+            clone.call(self, template.links[i], filter, table); 
+        }
+        
+        // append document fragment to the dom
+        self.linksTarget.innerHTML = '';
+        self.linksTarget.appendChild(df);
+    });
 }
 
 function init (config) {
