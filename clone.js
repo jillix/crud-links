@@ -107,8 +107,8 @@ function clone (link, filter, table) {
                             field: link.onDataSet[i].field,
                             operator: link.onDataSet[i].operator,
                             value: data[link.onDataSet[i].value],
-                            fixed: false,
-                            hidden: false
+                            fixed: true,
+                            hidden: true
                         });
                     }
                     
