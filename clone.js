@@ -29,7 +29,7 @@ function hideFilterAndRefreshForm (filterCloneMiid) {
         self.formTarget.style.display = "none";
     }
     
-    self.clones[filterCloneMiid].emit('setFilters', []);
+    self.clones[filterCloneMiid].emit('refresh');
 }
 
 function clone (link, filter, table) {
