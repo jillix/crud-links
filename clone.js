@@ -22,6 +22,16 @@ function cloneJSON(obj) {
     return cloneO;
 }
 
+function hideFilterAndRefreshForm (filterCloneMiid) {
+    var self = this;
+    
+    if (self.formTarget) {
+        self.formTarget.style.display = "none";
+    }
+    
+    self.clones[filterCloneMiid].emit('setFilters', []);
+}
+
 function clone (link, filter, table) {
     var self = this;
     
@@ -60,6 +70,14 @@ function clone (link, filter, table) {
             template: [ { handler: 'setTemplate' } ],
             filtersChanged: [ { handler: 'clearSkip' } ]
         };
+        
+        self.on('saved', self.config.formMiid, function () {
+            hideFilterAndRefreshForm.call(self, filterCloneMiid);
+        });
+        
+        self.on('removed', self.config.formMiid, function () {
+            hideFilterAndRefreshForm.call(self, filterCloneMiid);
+        });
         
         // configure crud links ui events
         if (link.table) {
@@ -131,10 +149,6 @@ function clone (link, filter, table) {
             
             if (link.onDataSet) {
                 self.clones[filterCloneMiid].emit('setTemplate', linkTemplate.id, true);
-                
-                self.on('hideForm', function () {
-                    self.clones[filterCloneMiid].emit('refresh');
-                });
             }
         });
         
