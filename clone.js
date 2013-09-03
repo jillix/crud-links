@@ -66,6 +66,12 @@ function clone (link, filter, table) {
             self.on('selectionChanged', tableCloneMiid, function (selection) {
                 
                 self.emit('resetForm');
+                
+                // show form
+                if (self.formTarget) {
+                    self.formTarget.style.display = "block";
+                }
+                
                 // set template on link form
                 self.emit('setFormTemplate', link.table.template || linkTemplate.id, function () {
                     
@@ -125,6 +131,10 @@ function clone (link, filter, table) {
             
             if (link.onDataSet) {
                 self.clones[filterCloneMiid].emit('setTemplate', linkTemplate.id, true);
+                
+                self.on('hideForm', function () {
+                    self.clones[filterCloneMiid].emit('refresh');
+                });
             }
         });
         

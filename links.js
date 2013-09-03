@@ -45,7 +45,7 @@ function setTemplate (template, force) {
         
         // delete events
         self.off('setData');
-        self.off('selectionChanged');
+        self.off('hideForm');
     
         // nothing to do when there are no links
         if (!template.links) {
@@ -79,12 +79,23 @@ function setTemplate (template, force) {
     });
 }
 
+function hideForm () {
+    var self = this;
+    
+    if (self.formTarget) {
+        self.formTarget.style.display = "none";
+    }
+}
+
 function init (config) {
     var self = this;
     self.config = config;
     self.linksTarget = self.dom.querySelector(self.config.linksTarget);
+    // TOOD make it configurable
+    self.formTarget = self.dom.querySelector('.amount-popup-container');
 
     self.on('setTemplate', setTemplate);
+    self.on('hideForm', hideForm);
 
     // listen to external events
     Events.call(self, self.config);
