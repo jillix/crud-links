@@ -53,6 +53,11 @@ function clone (link, filter, table) {
         // let CRUD know that he should listen to this new filter module
         self.emit('listenTo', [filterCloneMiid]);
         
+        // overwrite html
+        if (link.filter && link.filter.html) {
+            filterConfig.html = link.filter.html;
+        }
+        
         // the filter must wait for the table to load because it will notify the table about the template
         filterConfig.waitFor = filterConfig.waitFor || [];
         filterConfig.waitFor.push(tableCloneMiid);
