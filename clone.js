@@ -36,6 +36,10 @@ function clone (link, filter, table) {
     var self = this;
     
     self.emit('getTemplates', [link.template], function (err, templates) {
+
+        if (err || !templates) {
+            return;
+        }
         
         var linkTemplate;
         if (!(linkTemplate = templates[link.template])) {
