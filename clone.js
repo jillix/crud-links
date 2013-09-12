@@ -51,8 +51,8 @@ function clone (link, filter, table) {
         var tableConfig = cloneJSON(self.config.clones.table.config) || {};
         
         // the clone miids
-        var filterCloneMiid = self.config.clones.filter.miid + '_' + self.template._id + '_' + linkTemplate.id;
-        var tableCloneMiid = self.config.clones.table.miid + '_' + self.template._id + '_' + linkTemplate.id;
+        var filterCloneMiid = self.config.clones.filter.miid + '_' + self.template.id + '_' + linkTemplate.id;
+        var tableCloneMiid = self.config.clones.table.miid + '_' + self.template.id + '_' + linkTemplate.id;
         
         // let CRUD know that he should listen to this new filter module
         self.emit('listenTo', [filterCloneMiid]);
@@ -162,12 +162,12 @@ function clone (link, filter, table) {
         });
         
         // clone the filters for this link
-        M.clone(filter, self.config.clones.filter.miid, '_' + self.template._id + '_' + linkTemplate.id, filterConfig, function(module) {
+        M.clone(filter, self.config.clones.filter.miid, '_' + self.template.id + '_' + linkTemplate.id, filterConfig, function(module) {
             self.clones[filterCloneMiid] = module;
         });
         
         // clone the table for this link
-        M.clone(table, self.config.clones.table.miid, '_' + self.template._id + '_' + linkTemplate.id, tableConfig, function(module) {
+        M.clone(table, self.config.clones.table.miid, '_' + self.template.id + '_' + linkTemplate.id, tableConfig, function(module) {
             self.clones[tableCloneMiid] = module;
         });
     });
