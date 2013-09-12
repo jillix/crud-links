@@ -29,13 +29,6 @@ function setTemplate (template, force) {
 
     self.emit('getTemplates', [template], function (err, templates) {
         
-        template = templates[template];
-        if (!template || !template.links) {
-            return;
-        }
-        
-        self.template = template;
-        
         // uninit the clones
         for (var cloneMiid in self.clones) {
             self.uninit(cloneMiid);
@@ -43,16 +36,20 @@ function setTemplate (template, force) {
         // empty the clone cache
         self.clones = {};
         
+        template = templates[template];
+        
+        // nothing to do when there are no links
+        if (!template || !template.links) {
+            return;
+        }
+        
+        self.template = template;
+        
         // delete events
         self.off('setData');
         self.off('saved', self.config.formMiid);
         self.off('removed', self.config.formMiid);
-    
-        // nothing to do when there are no links
-        if (!template.links) {
-            return;
-        }
-        
+            
         // append links in order
         var df = document.createDocumentFragment();
         for (var i = 0, l = template.links.length; i < l; ++i) {
