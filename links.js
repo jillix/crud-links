@@ -9,7 +9,7 @@ function setData (data) {
 
 function setTemplate (template, force) {
     var self = this;
-
+    
     // TODO this is a hack until bind knows how select keys in parameters
     var template = typeof template === 'string' ? template : (template.id || template._id);
     if (!template) {
@@ -23,18 +23,18 @@ function setTemplate (template, force) {
     if (!force && self.template && self.template._id === template) {
         return;
     }
+    
+    // uninit the clones
+    for (var cloneMiid in self.clones) {
+        self.uninit(cloneMiid);
+    }
+    // empty the clone cache
+    self.clones = {};
 
     // reset links target html
     self.linksTarget.innerHTML = '';
 
     self.emit('getTemplates', [template], function (err, templates) {
-        
-        // uninit the clones
-        for (var cloneMiid in self.clones) {
-            self.uninit(cloneMiid);
-        }
-        // empty the clone cache
-        self.clones = {};
         
         template = templates[template];
         
