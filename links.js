@@ -30,6 +30,11 @@ function setTemplate (template, force) {
     }
     // empty the clone cache
     self.clones = {};
+    
+    // delete events
+    self.off('setData');
+    self.off('saved', self.config.formMiid);
+    self.off('removed', self.config.formMiid);
 
     // reset links target html
     self.linksTarget.innerHTML = '';
@@ -45,11 +50,6 @@ function setTemplate (template, force) {
         
         self.template = template;
         
-        // delete events
-        self.off('setData');
-        self.off('saved', self.config.formMiid);
-        self.off('removed', self.config.formMiid);
-            
         // append links in order
         var df = document.createDocumentFragment();
         for (var i = 0, l = template.links.length; i < l; ++i) {
