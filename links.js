@@ -26,6 +26,8 @@ function setTemplate (template, force) {
     
     // uninit the clones
     for (var cloneMiid in self.clones) {
+        if (!self.clones.hasOwnProperty(cloneMiid)) return;
+        
         self.uninit(cloneMiid);
     }
     // empty the clone cache
