@@ -3,10 +3,6 @@ M.wrap('github/jillix/crud-links/dev/links.js', function (require, module, expor
 var clone = require('./clone');
 var Events = require('github/jillix/events');
 
-function setData (data) {
-    var self = this;
-}
-
 function setTemplate (template, force) {
     var self = this;
     

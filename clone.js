@@ -92,17 +92,18 @@ function clone (link, filter, table) {
         
         // configure crud links ui events
         if (link.table) {
-            self.on('selectionChanged', tableCloneMiid, function (selection) {
+            
+            self.on(link.table.event || 'selectionChange', tableCloneMiid, function (selection) {
                 
                 self.emit('resetForm');
                 
-                // show form
-                if (self.formTarget) {
-                    self.formTarget.style.display = "block";
-                }
-                
                 // set template on link form
-                self.emit('setFormTemplate', link.table.template || linkTemplate.id, function () {
+                self.emit('setFormTemplate', link.saveIn || linkTemplate.id, function () {
+                    
+                    // show form
+                    if (self.formTarget) {
+                        self.formTarget.style.display = "block";
+                    }
                     
                     // build query
                     var query = {};
@@ -135,13 +136,13 @@ function clone (link, filter, table) {
             
             self.data = data;
             
-            if (link.onDataSet) {
+            if (link.filter.onDataSet) {
                 var filters = [];
-                for (var i = 0, l = link.onDataSet.length; i < l; ++i) {
+                for (var i = 0, l = link.filter.onDataSet.length; i < l; ++i) {
                     filters.push({
-                        field: link.onDataSet[i].field,
-                        operator: link.onDataSet[i].operator,
-                        value: data[link.onDataSet[i].value],
+                        field: link.filter.onDataSet[i].field,
+                        operator: link.filter.onDataSet[i].operator,
+                        value: data[link.filter.onDataSet[i].value],
                         fixed: true,
                         hidden: true
                     });
@@ -159,8 +160,43 @@ function clone (link, filter, table) {
                 self.clones[filterCloneMiid].emit('setTemplate', linkTemplate.id);
             }
             
-            if (link.onDataSet) {
+            if (link.filter.onDataSet) {
                 self.clones[filterCloneMiid].emit('setTemplate', linkTemplate.id, true);
+            }
+            
+            // handle show form button
+            if (link.showForm) {
+                var showForm = filter.querySelector(link.showForm.selector);
+                if (showForm) {
+                    showForm.addEventListener(link.showForm.event || 'click', function () {
+                        
+                        self.emit('resetForm');
+                        
+                        // set template on link form
+                        self.emit('setFormTemplate', link.saveIn || linkTemplate.id, function () {
+                            
+                            // set data on form
+                            if (link.showForm.data) {
+                                var setData = {};
+                                for (var key in link.showForm.data) {
+                                    
+                                    if (self.data[link.showForm.data[key]]) {
+                                        setData[key] = self.data[link.showForm.data[key]];
+                                    } else if (link.showForm.data[key][0] === '#') {
+                                        setData[key] = link.showForm.data[key].substr(1);
+                                    } 
+                                }
+                                
+                                self.emit('setFormData', setData, false);
+                            }
+                            
+                            // show form
+                            if (self.formTarget) {
+                                self.formTarget.style.display = "block";
+                            }
+                        });
+                    }, false);
+                }
             }
         });
         
