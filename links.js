@@ -40,7 +40,7 @@ function setTemplate (template, force) {
     self.emit('getTemplates', [template], function (err, templates) {
         
         // nothing to do when there are no links
-        if (!template || !template.links) {
+        if (!templates || !templates[template] || !templates[template].links) {
             return;
         }
         
