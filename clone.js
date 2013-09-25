@@ -140,7 +140,7 @@ function clone (link, filter, table) {
             
             self.data = data;
             
-            if (link.filter.onDataSet) {
+            if (link.filter && link.filter.onDataSet) {
                 var filters = [];
                 for (var i = 0, l = link.filter.onDataSet.length; i < l; ++i) {
                     filters.push({
@@ -164,7 +164,7 @@ function clone (link, filter, table) {
                 self.clones[filterCloneMiid].emit('setTemplate', linkTemplate.id);
             }
             
-            if (link.filter.onDataSet) {
+            if (link.filter && link.filter.onDataSet) {
                 self.clones[filterCloneMiid].emit('setTemplate', linkTemplate.id, true);
             }
             
