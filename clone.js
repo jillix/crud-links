@@ -31,7 +31,9 @@ function hideFilterAndRefreshForm (filterCloneMiid) {
         self.formTarget.style.display = "none";
     }
     
-    self.clones[filterCloneMiid].emit('refresh');
+    if (self.clones[filterCloneMiid]) {
+        self.clones[filterCloneMiid].emit('refresh');
+    }
 }
 
 function clone (link, filter, table) {
@@ -81,14 +83,6 @@ function clone (link, filter, table) {
             template: [ { handler: 'setTemplate' } ],
             filtersChanged: [ { handler: 'clearSkip' } ]
         };
-        
-        self.on('saved', self.config.formMiid, function () {
-            hideFilterAndRefreshForm.call(self, filterCloneMiid);
-        });
-        
-        self.on('removed', self.config.formMiid, function () {
-            hideFilterAndRefreshForm.call(self, filterCloneMiid);
-        });
         
         // configure crud links ui events
         if (link.table) {
@@ -158,6 +152,18 @@ function clone (link, filter, table) {
         
         // set up events when filter is ready
         self.once('ready', filterCloneMiid, function() {
+            
+            self.on('saved', self.config.formMiid, function () {
+                hideFilterAndRefreshForm.call(self, filterCloneMiid);
+            });
+            
+            self.on('removed', self.config.formMiid, function () {
+                hideFilterAndRefreshForm.call(self, filterCloneMiid);
+            });
+            
+            self.on('reset', self.config.formMiid, function () {
+                hideFilterAndRefreshForm.call(self, filterCloneMiid);
+            });
             
             // emit a special event to set the template for this filter module
             if (!(link.filter && link.filter.dontLoad)) {
