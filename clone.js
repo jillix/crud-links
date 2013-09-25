@@ -93,7 +93,7 @@ function clone (link, filter, table) {
         // configure crud links ui events
         if (link.table) {
             
-            self.on(link.table.event || 'selectionChange', tableCloneMiid, function (selection) {
+            self.on(link.table.event || 'selectionChanged', tableCloneMiid, function (selection) {
                 
                 self.emit('resetForm');
                 
