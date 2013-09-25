@@ -109,12 +109,16 @@ function clone (link, filter, table) {
                     var query = {};
                     if (link.table.query) {
                         for (var field in link.table.query) {
-                            if (!link.table.query.hasOwnProperty(field)) return;
+                            
+                            if (!link.table.query.hasOwnProperty(field)) {
+                                return;
+                            }
+                            
                             if (link.table.query[field].indexOf('#') === 0) {
                                 var _field = link.table.query[field].substr(1);
-                                query[field] = self.data[_field];
+                                query[field] = selection[_field];
                             } else {
-                                query[field] = selection[link.table.query[field]];
+                                query[field] = self.data[link.table.query[field]];
                             }
                         }
                         
