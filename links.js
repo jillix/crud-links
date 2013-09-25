@@ -39,12 +39,12 @@ function setTemplate (template, force) {
 
     self.emit('getTemplates', [template], function (err, templates) {
         
-        template = templates[template];
-        
         // nothing to do when there are no links
         if (!template || !template.links) {
             return;
         }
+        
+        template = templates[template];
         
         self.template = template;
         
