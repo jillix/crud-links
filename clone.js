@@ -208,6 +208,14 @@ function clone (link, filter, table) {
                     }, false);
                 }
             }
+            
+            // add title to links
+            if (link.title && linkTemplate.options && linkTemplate.options.label) {
+                var title = filter.querySelector(link.title);
+                if (title) {
+                    title.innerHTML = linkTemplate.options.label[M.getLocale()];
+                }
+            }
         });
         
         // clone the filters for this link
