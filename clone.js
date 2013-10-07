@@ -75,7 +75,10 @@ function clone (link, filter, table) {
         filterConfig.listen[tableCloneMiid] = {
             setOptions: [ { emit: 'setOptions' } ]
         };
-        
+
+        // add a new miid into i18n miid list
+        self.emit("i18nListen", filterCloneMiid);
+
         // configure the table to listen to the filter module
         tableConfig.listen = tableConfig.listen || {};
         tableConfig.listen[filterCloneMiid] = {
