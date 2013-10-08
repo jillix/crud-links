@@ -37,16 +37,20 @@ function setTemplate (template, force) {
     // reset links target html
     self.linksTarget.innerHTML = '';
 
-    self.emit('getTemplates', [template], function (err, templates) {
+    self.emit('find', [template], function (err, templates) {
+
+        for (var template in templates) {
+            if (!templates.hasOwnProperty(template)) continue;
+
+           self.template = templates[template];
+        }
+
+        var template = self.template;
         
         // nothing to do when there are no links
-        if (!templates || !templates[template] || !templates[template].links) {
+        if (!templates || !self.template || !self.template.links) {
             return;
         }
-        
-        template = templates[template];
-        
-        self.template = template;
         
         // append links in order
         var df = document.createDocumentFragment();

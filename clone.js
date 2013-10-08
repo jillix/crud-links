@@ -39,14 +39,20 @@ function hideFilterAndRefreshForm (filterCloneMiid) {
 function clone (link, filter, table) {
     var self = this;
     
-    self.emit('getTemplates', [link.template], function (err, templates) {
+    self.emit('find', [link.template], function (err, templates) {
 
         if (err || !templates) {
             return;
         }
         
-        var linkTemplate;
-        if (!(linkTemplate = templates[link.template])) {
+        for (var template in templates) {
+            if (!templates.hasOwnProperty(template)) continue;
+
+           var linkTemplate = templates[template];
+        }
+
+
+        if (!linkTemplate) {
             return;
         }
         
@@ -55,8 +61,8 @@ function clone (link, filter, table) {
         var tableConfig = cloneJSON(self.config.clones.table.config) || {};
         
         // the clone miids
-        var filterCloneMiid = self.config.clones.filter.miid + '_' + self.template.id + '_' + linkTemplate.id;
-        var tableCloneMiid = self.config.clones.table.miid + '_' + self.template.id + '_' + linkTemplate.id;
+        var filterCloneMiid = self.config.clones.filter.miid + '_' + self.template._id + '_' + linkTemplate._id;
+        var tableCloneMiid = self.config.clones.table.miid + '_' + self.template._id + '_' + linkTemplate._id;
         
         // let CRUD know that he should listen to this new filter module
         self.emit('listenTo', [filterCloneMiid]);
@@ -95,7 +101,7 @@ function clone (link, filter, table) {
                 self.emit('resetForm');
                 
                 // set template on link form
-                self.emit('setFormTemplate', link.saveIn || linkTemplate.id, function () {
+                self.emit('setFormTemplate', link.saveIn || linkTemplate._id, function () {
                     
                     // show form
                     if (self.formTarget) {
@@ -170,11 +176,11 @@ function clone (link, filter, table) {
             
             // emit a special event to set the template for this filter module
             if (!(link.filter && link.filter.dontLoad)) {
-                self.clones[filterCloneMiid].emit('setTemplate', linkTemplate.id);
+                self.clones[filterCloneMiid].emit('setTemplate', linkTemplate._id);
             }
             
             if (link.filter && link.filter.onDataSet) {
-                self.clones[filterCloneMiid].emit('setTemplate', linkTemplate.id, true);
+                self.clones[filterCloneMiid].emit('setTemplate', linkTemplate._id, true);
             }
             
             // handle show form button
@@ -186,7 +192,7 @@ function clone (link, filter, table) {
                         self.emit('resetForm');
                         
                         // set template on link form
-                        self.emit('setFormTemplate', link.saveIn || linkTemplate.id, function () {
+                        self.emit('setFormTemplate', link.saveIn || linkTemplate._id, function () {
                             
                             // set data on form
                             if (link.showForm.data) {
@@ -222,12 +228,13 @@ function clone (link, filter, table) {
         });
         
         // clone the filters for this link
-        M.clone(filter, self.config.clones.filter.miid, '_' + self.template.id + '_' + linkTemplate.id, filterConfig, function(module) {
+     
+        M.clone(filter, self.config.clones.filter.miid, '_' + self.template._id + '_' + linkTemplate._id, filterConfig, function(module) {
             self.clones[filterCloneMiid] = module;
         });
         
         // clone the table for this link
-        M.clone(table, self.config.clones.table.miid, '_' + self.template.id + '_' + linkTemplate.id, tableConfig, function(module) {
+        M.clone(table, self.config.clones.table.miid, '_' + self.template._id + '_' + linkTemplate._id, tableConfig, function(module) {
             self.clones[tableCloneMiid] = module;
         });
     });
