@@ -58,7 +58,7 @@ function clone (link, filter, table) {
         // let CRUD know that he should listen to this new filter module
         var flowConfig = {};
         flowConfig[filterCloneMiid] = {
-            find: ['read'];
+            find: ['read']
         };
         self.emit('listenTo', flowConfig);
         
@@ -135,7 +135,6 @@ function clone (link, filter, table) {
         
         // handle on dataSet
         self.on('setData', function (data) {
-            console.log('set data');
             self.data = data;
             
             if (link.filter && link.filter.onDataSet) {

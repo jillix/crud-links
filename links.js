@@ -33,6 +33,7 @@ function setTemplate (template, force) {
     
     // delete events
     self.off('setData');
+    self.off('listenTo');
     self.off('saved', self.config.formMiid);
     self.off('removed', self.config.formMiid);
 
@@ -81,7 +82,7 @@ function init (config) {
     self.linksTarget = self.dom.querySelector(self.config.linksTarget);
     self.formTarget = self.dom.querySelector(self.config.formTarget);
     
-    self.on('templateSet', setTemplate);
+    self.on('setTemplate', setTemplate);
 
     // listen to external events
     Events.call(self, self.config);
