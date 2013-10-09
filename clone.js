@@ -56,7 +56,11 @@ function clone (link, filter, table) {
         var tableCloneMiid = self.config.clones.table.miid + '_' + self.template._id + '_' + linkTemplate._id;
         
         // let CRUD know that he should listen to this new filter module
-        self.emit('listenTo', [filterCloneMiid]);
+        var flowConfig = {};
+        flowConfig[filterCloneMiid] = {
+            find: ['read'];
+        };
+        self.emit('listenTo', flowConfig);
         
         // overwrite html
         if (link.filter && link.filter.html) {
