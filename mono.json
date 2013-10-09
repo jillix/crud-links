@@ -6,6 +6,7 @@
         "/links.js",
         "/clone.js",
         "github/jillix/events/v0.1.4"
+        "github/jillix/crud/dev"
     ]
 }
 

@@ -1,6 +1,7 @@
 M.wrap('github/jillix/crud-links/dev/links.js', function (require, module, exports) {
 
 var clone = require('./clone');
+var Crud = require('github/jillix/crud');
 var Events = require('github/jillix/events');
 
 function setTemplate (template, force) {
@@ -81,7 +82,8 @@ function init (config) {
     self.linksTarget = self.dom.querySelector(self.config.linksTarget);
     self.formTarget = self.dom.querySelector(self.config.formTarget);
 
-    self.on('setTemplate', setTemplate);
+    Crud.call(self);
+    //self.on('templateSet', setTemplate);
 
     // listen to external events
     Events.call(self, self.config);
