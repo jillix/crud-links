@@ -24,7 +24,7 @@ function cloneJSON(obj) {
     return cloneO;
 }
 
-function hideFilterAndRefreshForm (filterCloneMiid) {
+function hideFormAndRefreshFilter (filterCloneMiid) {
     var self = this;
     
     if (self.formTarget) {
@@ -157,15 +157,15 @@ function clone (link, filter, table) {
         self.once('ready', filterCloneMiid, function() {
             
             self.on('saved', self.config.formMiid, function () {
-                hideFilterAndRefreshForm.call(self, filterCloneMiid);
+                hideFormAndRefreshFilter.call(self, filterCloneMiid);
             });
             
             self.on('removed', self.config.formMiid, function () {
-                hideFilterAndRefreshForm.call(self, filterCloneMiid);
+                hideFormAndRefreshFilter.call(self, filterCloneMiid);
             });
             
-            self.on('reset', self.config.formMiid, function () {
-                hideFilterAndRefreshForm.call(self, filterCloneMiid);
+            self.on('cancel', self.config.formMiid, function () {
+                hideFormAndRefreshFilter.call(self, filterCloneMiid);
             });
             
             // emit a special event to set the template for this filter module
