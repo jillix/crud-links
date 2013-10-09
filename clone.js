@@ -167,13 +167,6 @@ function clone (link, filter, table) {
             
             // emit a special event to set the template for this filter module
             self.clones[filterCloneMiid].emit('setTemplate', linkTemplate._id, (link.filter && link.filter.onDataSet ? true : false));
-            /*if (!(link.filter && link.filter.dontLoad)) {
-                
-            }
-            
-            if (link.filter && link.filter.onDataSet) {
-                self.clones[filterCloneMiid].emit('setTemplate', linkTemplate._id, true);
-            }*/
             
             // handle show form button
             if (link.showForm) {
