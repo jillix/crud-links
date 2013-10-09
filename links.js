@@ -36,6 +36,9 @@ function setTemplate (template, force) {
     self.off('saved', self.config.formMiid);
     self.off('removed', self.config.formMiid);
 
+    // reset template
+    self.template = null;
+
     // reset links target html
     self.linksTarget.innerHTML = '';
 
