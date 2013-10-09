@@ -7,7 +7,7 @@ function setTemplate (template, force) {
     var self = this;
     
     // TODO this is a hack until bind knows how select keys in parameters
-    var template = typeof template === 'string' ? template : (template.id || template._id);
+    var template = typeof template === 'string' ? template : template._id;
     if (!template) {
         // cleanup on error
         self.linksTarget.innerHTML = '';
@@ -22,7 +22,9 @@ function setTemplate (template, force) {
     
     // uninit the clones
     for (var cloneMiid in self.clones) {
-        if (!self.clones.hasOwnProperty(cloneMiid)) return;
+        if (!self.clones.hasOwnProperty(cloneMiid)) {
+            continue;
+        };
         
         self.uninit(cloneMiid);
     }
@@ -38,19 +40,13 @@ function setTemplate (template, force) {
     self.linksTarget.innerHTML = '';
 
     self.emit('find', [template], function (err, templates) {
-
-        for (var template in templates) {
-            if (!templates.hasOwnProperty(template)) continue;
-
-           self.template = templates[template];
-        }
-
-        var template = self.template;
         
-        // nothing to do when there are no links
-        if (!templates || !self.template || !self.template.links) {
+        // nothing to do when there are no links or errors
+        if (err || !templates || !templates[0] || !templates[0].links) {
             return;
         }
+        
+        var template =  self.template = templates[0];
         
         // append links in order
         var df = document.createDocumentFragment();

@@ -41,20 +41,11 @@ function clone (link, filter, table) {
     
     self.emit('find', [link.template], function (err, templates) {
 
-        if (err || !templates) {
+        if (err || !templates || !templates[0]) {
             return;
         }
         
-        for (var template in templates) {
-            if (!templates.hasOwnProperty(template)) continue;
-
-           var linkTemplate = templates[template];
-        }
-
-
-        if (!linkTemplate) {
-            return;
-        }
+        var linkTemplate = templates[0];
         
         // we clone the default configurations because they will be modified by the modules
         var filterConfig = cloneJSON(self.config.clones.filter.config) || {};
@@ -140,7 +131,7 @@ function clone (link, filter, table) {
         
         // handle on dataSet
         self.on('setData', function (data) {
-            
+            console.log('set data');
             self.data = data;
             
             if (link.filter && link.filter.onDataSet) {
@@ -175,13 +166,14 @@ function clone (link, filter, table) {
             });
             
             // emit a special event to set the template for this filter module
-            if (!(link.filter && link.filter.dontLoad)) {
-                self.clones[filterCloneMiid].emit('setTemplate', linkTemplate._id);
+            self.clones[filterCloneMiid].emit('setTemplate', linkTemplate._id, (link.filter && link.filter.onDataSet ? true : false));
+            /*if (!(link.filter && link.filter.dontLoad)) {
+                
             }
             
             if (link.filter && link.filter.onDataSet) {
                 self.clones[filterCloneMiid].emit('setTemplate', linkTemplate._id, true);
-            }
+            }*/
             
             // handle show form button
             if (link.showForm) {
