@@ -33,7 +33,6 @@ function setTemplate (template, force) {
     
     // delete events
     self.off('setData');
-    self.off('listenTo');
     self.off('saved', self.config.formMiid);
     self.off('removed', self.config.formMiid);
 
