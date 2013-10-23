@@ -1,5 +1,3 @@
-M.wrap('github/jillix/crud-links/dev/links.js', function (require, module, exports) {
-
 var clone = require('./clone');
 var Events = require('github/jillix/events');
 
@@ -22,9 +20,7 @@ function setTemplate (template, force) {
     
     // uninit the clones
     for (var cloneMiid in self.clones) {
-        if (!self.clones.hasOwnProperty(cloneMiid)) {
-            continue;
-        };
+        if (!self.clones.hasOwnProperty(cloneMiid)) continue;
         
         self.uninit(cloneMiid);
     }
@@ -94,4 +90,3 @@ function init (config) {
 
 module.exports = init;
 
-return module; });

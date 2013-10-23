@@ -1,5 +1,3 @@
-M.wrap('github/jillix/crud-links/dev/clone.js', function (require, module, exports) {
-
 // function to clone a JSON object (it wil not clone function, dates, etc.)
 function cloneJSON(obj) {
     // basic type deep copy
@@ -16,10 +14,10 @@ function cloneJSON(obj) {
     }
     // object deep copy
     var cloneO = {};
-    for (var i in obj) {
-        if (!obj.hasOwnProperty(i)) return;
+    for (var key in obj) {
+        if (!obj.hasOwnProperty(key)) continue;
 
-        cloneO[i] = cloneJSON(obj[i]);
+        cloneO[key] = cloneJSON(obj[key]);
     }
     return cloneO;
 }
@@ -107,10 +105,7 @@ function clone (link, filter, table) {
                     var query = {};
                     if (link.table.query) {
                         for (var field in link.table.query) {
-                            
-                            if (!link.table.query.hasOwnProperty(field)) {
-                                return;
-                            }
+                            if (!link.table.query.hasOwnProperty(field)) continue;
                             
                             if (link.table.query[field].indexOf('#') === 0) {
                                 var _field = link.table.query[field].substr(1);
@@ -186,6 +181,7 @@ function clone (link, filter, table) {
                             if (link.showForm.data) {
                                 var setData = {};
                                 for (var key in link.showForm.data) {
+                                    if (!link.showForm.data.hasOwnProperty(key)) continue;
                                     
                                     if (self.data[link.showForm.data[key]]) {
                                         setData[key] = self.data[link.showForm.data[key]];
@@ -230,4 +226,3 @@ function clone (link, filter, table) {
 
 module.exports = clone;
 
-return module; });
