@@ -22,7 +22,7 @@ function cloneJSON(obj) {
     return cloneO;
 }
 
-function hideFormAndRefreshFilter (filterCloneMiid) {
+function hideFormAndRefreshFilter (filterCloneMiid, tableCloneMiid) {
     var self = this;
     
     if (self.formTarget) {
@@ -31,6 +31,7 @@ function hideFormAndRefreshFilter (filterCloneMiid) {
     
     if (self.clones[filterCloneMiid]) {
         self.clones[filterCloneMiid].emit('refresh');
+        self.clones[tableCloneMiid].emit("clearSkip");
     }
 }
 
@@ -152,15 +153,15 @@ function clone (link, filter, table) {
         self.once('ready', filterCloneMiid, function() {
             
             self.on('saved', self.config.formMiid, function () {
-                hideFormAndRefreshFilter.call(self, filterCloneMiid);
+                hideFormAndRefreshFilter.call(self, filterCloneMiid, tableCloneMiid);
             });
             
             self.on('removed', self.config.formMiid, function () {
-                hideFormAndRefreshFilter.call(self, filterCloneMiid);
+                hideFormAndRefreshFilter.call(self, filterCloneMiid, tableCloneMiid);
             });
             
             self.on('cancel', self.config.formMiid, function () {
-                hideFormAndRefreshFilter.call(self, filterCloneMiid);
+                hideFormAndRefreshFilter.call(self, filterCloneMiid, tableCloneMiid);
             });
             
             // emit a special event to set the template for this filter module
@@ -225,4 +226,3 @@ function clone (link, filter, table) {
 }
 
 module.exports = clone;
-
