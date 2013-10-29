@@ -29,6 +29,7 @@ function hideFormAndRefreshFilter (filterCloneMiid, tableCloneMiid) {
     
     if (self.clones[filterCloneMiid]) {
         self.clones[tableCloneMiid].emit("clearSkip");
+        self.clones[filterCloneMiid].emit('setOptions', {skip: 0});
         self.clones[filterCloneMiid].emit('refresh');
     }
 }
