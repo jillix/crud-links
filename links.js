@@ -70,7 +70,9 @@ function setTemplate (template, force) {
         }
         
         // append document fragment to the dom
-        self.linksTarget.appendChild(df);
+        //self.linksTarget.appendChild(df);
+        // TODO this is only temporary until we find a better solution to load the links from form
+        $('#' + self.linksTarget.id).html(df);
     });
 }
 
@@ -79,7 +81,7 @@ function init (config) {
     self.config = config;
     self.linksTarget = self.dom.querySelector(self.config.linksTarget);
     self.formTarget = self.dom.querySelector(self.config.formTarget);
-    
+
     self.on('setTemplate', setTemplate);
 
     // listen to external events
@@ -89,4 +91,3 @@ function init (config) {
 }
 
 module.exports = init;
-
