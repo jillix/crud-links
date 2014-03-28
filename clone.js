@@ -1,3 +1,4 @@
+M.wrap('github/jillix/crud-links/dev/clone.js', function (require, module, exports) {
 // function to clone a JSON object (it wil not clone function, dates, etc.)
 function cloneJSON(obj) {
     // basic type deep copy
@@ -136,6 +137,10 @@ function clone (link, filter, table) {
             delete filterConfig.ui;
         }
         
+        // clone the filters for this link
+        M.clone(filter, self.config.clones.filter.miid, '_' + self.template._id + '_' + linkTemplate._id, filterConfig, function(module) {
+            self.clones[filterCloneMiid] = module;
+
         // handle on dataSet
         self.on('setData', function (data) {
             self.data = data;
@@ -155,7 +160,7 @@ function clone (link, filter, table) {
                 self.clones[filterCloneMiid].emit('setFilters', filters, true);
             }
         });
-        
+
         // set up events when filter is ready
         self.once('ready', filterCloneMiid, function() {
             
@@ -219,10 +224,6 @@ function clone (link, filter, table) {
             }
         });
         
-        // clone the filters for this link
-     
-        M.clone(filter, self.config.clones.filter.miid, '_' + self.template._id + '_' + linkTemplate._id, filterConfig, function(module) {
-            self.clones[filterCloneMiid] = module;
         });
         
         // clone the table for this link
@@ -233,3 +234,4 @@ function clone (link, filter, table) {
 }
 
 module.exports = clone;
+return module; });

@@ -1,3 +1,4 @@
+M.wrap('github/jillix/crud-links/dev/links.js', function (require, module, exports) {
 var clone = require('./clone');
 var Events = require('github/jillix/events');
 
@@ -17,26 +18,9 @@ function setTemplate (template, force) {
     if (!force && self.template && self.template._id === template) {
         return;
     }
-    
-    // uninit the clones
-    for (var cloneMiid in self.clones) {
-        if (!self.clones.hasOwnProperty(cloneMiid)) continue;
-        
-        self.uninit(cloneMiid);
-    }
-    // empty the clone cache
-    self.clones = {};
-    
-    // delete events
-    self.off('setData');
-    self.off('saved', self.config.formMiid);
-    self.off('removed', self.config.formMiid);
 
-    // reset template
-    self.template = null;
-
-    // reset links target html
-    self.linksTarget.innerHTML = '';
+    // first uninit the clones and template
+    uninit.call(self);
 
     self.emit('find', [template], function (err, templates) {
         
@@ -83,6 +67,7 @@ function init (config) {
     self.formTarget = self.dom.querySelector(self.config.formTarget);
 
     self.on('setTemplate', setTemplate);
+    self.on('uninit', uninit);
 
     // listen to external events
     Events.call(self, self.config);
@@ -90,4 +75,30 @@ function init (config) {
     self.emit('ready');
 }
 
+function uninit () {
+    var self = this;
+
+    // uninit the clones
+    for (var cloneMiid in self.clones) {
+        if (!self.clones.hasOwnProperty(cloneMiid)) continue;
+
+        self.uninit(cloneMiid);
+    }
+    // empty the clone cache
+    self.clones = {};
+
+    // delete events
+    self.off('setData');
+    self.off('saved', self.config.formMiid);
+    self.off('removed', self.config.formMiid);
+
+    // reset template
+    self.template = null;
+
+    // reset links target html
+    self.linksTarget.innerHTML = '';
+}
+
 module.exports = init;
+
+return module; });
