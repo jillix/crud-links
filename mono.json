@@ -5,7 +5,7 @@
     "dependencies": [
         "/links.js",
         "/clone.js",
-        "github/jillix/events/v0.1.8"
+        "github/jillix/events/v0.1.9"
     ]
 }
 
