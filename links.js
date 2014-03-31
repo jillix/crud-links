@@ -71,7 +71,7 @@ function init (config) {
 
     // listen to external events
     Events.call(self, self.config);
-    
+
     self.emit('ready');
 }
 
@@ -82,7 +82,7 @@ function uninit () {
     for (var cloneMiid in self.clones) {
         if (!self.clones.hasOwnProperty(cloneMiid)) continue;
 
-        self.uninit(cloneMiid);
+        self.uninit(cloneMiid, true);
     }
     // empty the clone cache
     self.clones = {};
@@ -91,6 +91,9 @@ function uninit () {
     self.off('setData');
     self.off('saved', self.config.formMiid);
     self.off('removed', self.config.formMiid);
+
+    // uninit external events
+    Events.call(self, self.config, true);
 
     // reset template
     self.template = null;
