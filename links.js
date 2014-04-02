@@ -1,4 +1,3 @@
-M.wrap('github/jillix/crud-links/dev/links.js', function (require, module, exports) {
 var clone = require('./clone');
 var Events = require('github/jillix/events');
 
@@ -101,4 +100,3 @@ function uninit () {
 
 module.exports = init;
 
-return module; });

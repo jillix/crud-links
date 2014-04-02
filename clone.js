@@ -1,4 +1,3 @@
-M.wrap('github/jillix/crud-links/dev/clone.js', function (require, module, exports) {
 // function to clone a JSON object (it wil not clone function, dates, etc.)
 function cloneJSON(obj) {
     // basic type deep copy
@@ -233,4 +232,4 @@ function clone (link, filter, table) {
 }
 
 module.exports = clone;
-return module; });
+
