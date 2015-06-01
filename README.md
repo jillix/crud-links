@@ -62,5 +62,9 @@ links: [{
 
 ## Changelog
 
+### `v0.3.0`
+ - transferred the module to the new jxMono organization
+ - updated Events to `v0.4.0`
+
 ### `v0.2.0`
  - Updated deps
