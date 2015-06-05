@@ -1,6 +1,5 @@
-M.wrap('github/jillix/crud-links/dev/links.js', function (require, module, exports) {
 var clone = require('./clone');
-var Events = require('github/jillix/events');
+var Events = require('github/jxmono/events');
 
 function setTemplate (template, force) {
     var self = this;
@@ -100,5 +99,3 @@ function uninit () {
 }
 
 module.exports = init;
-
-return module; });
